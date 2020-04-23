@@ -34,6 +34,7 @@ class vote(minqlx.Plugin):
                     "^5thrufloors <on/off>      ^3- ^7set damage through floors on or off (default)\n"
                     "^5footsteps <on/off>       ^3- ^7set footsteps on or off (cannot be changed in PQL)\n"
                     "^5overtime <0/120>         ^3- ^7set overtime to 0 (sudden death) or 120 seconds (default)\n"
+                    "^5sgdamage <5/6>           ^3- ^7set SG damage to either 5 or 6 (and knockback to 1.75 or 1.50)\n"
                     "^5lgdamage <6/7>           ^3- ^7set LG damage to either 6 or 7 (and knockback to 1.75 or 1.50)\n"
                     "^5mgdamage <5/7>           ^3- ^7set MG damage to either 5 (QL default) or 7 (Q3 default)\n"
                     "^5rgdamage <80/100>        ^3- ^7set RG damage to either 80 (QL default) or 100 (Q3 default)\n"
@@ -62,6 +63,11 @@ class vote(minqlx.Plugin):
             player.tell("Sudden death is ^2enabled^7 (not default). To disable, ^2/cv overtime 120^7.")
         if self.get_cvar("g_damage_lg") == "7":
             player.tell("LG damage is set to ^27^7 (not default). To change, ^2/cv lgdamage 6^7.")
+        # TG edit
+        if self.get_cvar("g_damage_sg") == "6":
+            player.tell("SG damage is set to ^26^7 (not default). To change, ^2/cv sgdamage 5^7.")
+        # end edit
+
         if self.get_cvar("g_damage_mg") == "7":
             player.tell("MG damage is set to ^27^7 (not default). To change, ^2/cv mgdamage 5^7.")
         if self.get_cvar("g_damage_rg") == "100":
@@ -172,6 +178,21 @@ class vote(minqlx.Plugin):
             else:
                 caller.tell("^2/cv lgdamage [6/7]^7 is the usage for this callvote command.")
                 return minqlx.RET_STOP_ALL
+
+        # TG EDIT
+        if vote.lower() == "sgdamage":
+            if args == "5":
+                self.callvote("g_damage_sg 5; g_damage_sg_outer 5", "Set SG damage to 5 (default)?")
+                self.msg("{}^7 called a vote.".format(caller.name))
+                return minqlx.RET_STOP_ALL
+            elif args == "6":
+                self.callvote("g_damage_sg 6; g_damage_sg_outer 6", "Set SG damage to 6 (Similar to quake champions and quake2, suggested by your PM xD)?")
+                self.msg("{}^7 called a vote.".format(caller.name))
+                return minqlx.RET_STOP_ALL
+            else:
+                caller.tell("^2/cv sgdamage [6/7]^7 is the usage for this callvote command.")
+                return minqlx.RET_STOP_ALL
+        
 
         if vote.lower() == "rgdamage":
             if args == "80":
